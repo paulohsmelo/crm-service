@@ -4,6 +4,5 @@ ENV APP_HOME /app
 COPY . $APP_HOME
 WORKDIR $APP_HOME
 RUN ./mvnw clean install -U -DskipTests
-COPY ./target/crmservice-*.jar ./target/app.jar
 EXPOSE 8080
-ENTRYPOINT /usr/local/openjdk-17/bin/java -jar ./target/app.jar
+ENTRYPOINT /usr/local/openjdk-17/bin/java -jar ./target/crmservice-0.0.1-SNAPSHOT.jar
