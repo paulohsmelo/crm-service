@@ -2,7 +2,7 @@ services:
   crm:
     build:
       context: .
-    image: crm-service:local
+    image: 873598863456.dkr.ecr.us-east-1.amazonaws.com/crm-service:latest
     container_name: crm-service
     ports:
       - "8080:8080"
