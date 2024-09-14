@@ -1,0 +1,37 @@
+services:
+  crm:
+    build:
+      context: .
+    image: crm-service:local
+    container_name: crm-service
+    ports:
+      - "8080:8080"
+    environment:
+      CRM_DB_URL: ${CRM_DB_URL}
+      CRM_DB_USERNAME: ${CRM_DB_USERNAME}
+      CRM_DB_PASSWORD: ${CRM_DB_PASSWORD}
+      PHOTO_UPLOAD_DIRECTORY: ${PHOTO_UPLOAD_DIRECTORY}
+    depends_on:
+      - db
+    networks:
+      - crmnetwork
+  db:
+    image: postgres:14.3
+    container_name: postgres_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${CRM_DB_URL}
+      POSTGRES_USER: ${CRM_DB_USERNAME}
+      POSTGRES_PASSWORD: ${CRM_DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - crmnetwork
+
+volumes:
+  postgres_data:
+
+networks:
+  crmnetwork:
+    driver: bridge

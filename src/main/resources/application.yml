@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: CRM Service
+  datasource:
+    url: ${CRM_DB_URL}
+    username: ${CRM_DB_USERNAME}
+    password: ${CRM_DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate.ddl-auto: none
+  flyway:
+    locations: classpath:/db/migration
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
+
+springdoc:
+  swagger-ui:
+    operationsSorter: method
+
+application:
+  upload-directory: ${PHOTO_UPLOAD_DIRECTORY}
