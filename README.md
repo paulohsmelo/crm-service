@@ -39,9 +39,9 @@ and a new docker image is build and sent to AWC ECR.
 #### Docker Compose 
 
 Use the environment variables below to configure a specific user created to access the ECR repository that is storing the application docker image.
-* export AWS_ACCESS_KEY_ID=AKIA4WZUMZBQOMUDWNJU
-* export AWS_SECRET_ACCESS_KEY=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
-* export AWS_DEFAULT_REGION=us-east-1
+* `export AWS_ACCESS_KEY_ID=AKIA4WZUMZBQOMUDWNJU`
+* `export AWS_SECRET_ACCESS_KEY=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`
+* `export AWS_DEFAULT_REGION=us-east-1`
 
 Log in the AWS ECR using provided credentials
 * aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 873598863456.dkr.ecr.us-east-1.amazonaws.com
