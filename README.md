@@ -17,9 +17,6 @@ Users can manage `Customers`, while an `admin` user can manage `Customers` and `
 * Open API
 * Testcontainers
 
-This project uses TeamCity as CI/CD tool, after a new commit at main branch, the build pipeline is triggered, tests are executed
-and a new docker image is build and sent to AWC ECR.
-
 ## Building and Running
 
 ### Requisites
@@ -66,6 +63,19 @@ In this option, you can use either the database from docker-compose.yml or insta
 ## Documentation
 
 After running the application, open `http://localhost:8080/swagger-ui/index.html` to access the Swagger documentation.
+
+A default user admin is created by database migration, username `admin`, password `admin123`.
+
+## CI/CD
+
+This project uses TeamCity as CI/CD tool, after a new commit at main branch, the build pipeline is triggered, tests are executed
+and a new docker image is build and sent to AWC ECR.
+
+Access https://crmservice.teamcity.com/project/CrmService?mode=builds using following credentials to check the build.
+* Username: `agilemonkeys`
+* Password: `9XqU29YjN75dYwP`
+
+Alternatively, access the repository in GitHub and check the build for individual commits in the `Commit List`. 
 
 ## Postman Collection
 
