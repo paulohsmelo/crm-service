@@ -6,32 +6,49 @@ services:
     container_name: crm-service
     ports:
       - "8080:8080"
+    network_mode: host
     environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       CRM_DB_URL: ${CRM_DB_URL}
       CRM_DB_USERNAME: ${CRM_DB_USERNAME}
       CRM_DB_PASSWORD: ${CRM_DB_PASSWORD}
-      PHOTO_UPLOAD_DIRECTORY: ${PHOTO_UPLOAD_DIRECTORY}
+      AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+      AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+      AWS_REGION: ${AWS_REGION}
+      S3_BUCKET_NAME: ${S3_BUCKET_NAME}
     depends_on:
       - db
-    networks:
-      - crmnetwork
   db:
     image: postgres:14.3
     container_name: postgres_db
     ports:
       - "5432:5432"
+    network_mode: host
     environment:
       POSTGRES_DB: ${CRM_DB_URL}
       POSTGRES_USER: ${CRM_DB_USERNAME}
       POSTGRES_PASSWORD: ${CRM_DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - crmnetwork
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    network_mode: host
+    environment:
+      EDGE_PORT: "4566"
+      AWS_DEFAULT_REGION: ${AWS_REGION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_KEY}
+      SERVICES: "s3"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
 
 volumes:
   postgres_data:
-
-networks:
-  crmnetwork:
-    driver: bridge

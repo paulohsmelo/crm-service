@@ -15,10 +15,18 @@ spring:
     multipart:
       max-file-size: 1MB
       max-request-size: 1MB
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      s3:
+        region: ${AWS_REGION}
 
 springdoc:
   swagger-ui:
     operationsSorter: method
 
 application:
-  upload-directory: ${PHOTO_UPLOAD_DIRECTORY}
+  s3:
+    bucket-name: ${S3_BUCKET_NAME}
