@@ -1,7 +1,6 @@
 package com.paulohsmelo.crmservice.controller;
 
 import com.paulohsmelo.crmservice.exception.NoDataFoundException;
-import com.paulohsmelo.crmservice.exception.BadRequestException;
 import com.paulohsmelo.crmservice.exception.UnprocessableEntityException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,12 +22,6 @@ public class CrmControllerAdvice {
     public ResponseEntity<String> handleDataNotFoundException(final NoDataFoundException exception) {
         log.info(exception.getMessage());
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<String> handleBadRequestException(final BadRequestException exception) {
-        log.error(exception.getMessage());
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)

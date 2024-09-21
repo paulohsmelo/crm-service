@@ -1,0 +1,6 @@
+application:
+  localstack:
+    endpoint: ${LOCALSTACK_ENDPOINT}
+    region: ${LOCALSTACK_REGION}
+    access-key: ${LOCALSTACK_ACCESS_KEY}
+    secret-key: ${LOCALSTACK_SECRET_KEY}

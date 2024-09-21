@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URL;
 import java.util.List;
 
 import static com.paulohsmelo.crmservice.mapper.CustomerMapper.mapToDTO;
@@ -66,9 +67,9 @@ public class CustomerService implements ICustomerService {
     public CustomerDTO uploadPhoto(Long id, MultipartFile file) {
         Customer customer = getCustomer(id);
 
-        String photoUrl = uploadService.uploadCustomerPhoto(customer.getId(), file);
+        URL photoUrl = uploadService.uploadCustomerPhoto(customer.getId(), file);
 
-        customer.setPhotoUrl(photoUrl);
+        customer.setPhotoUrl(photoUrl.getPath());
         customerRepository.save(customer);
 
         return mapToDTO(customer);

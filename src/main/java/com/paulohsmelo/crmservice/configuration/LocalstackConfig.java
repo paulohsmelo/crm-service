@@ -14,15 +14,18 @@ import java.net.URI;
 
 @Configuration
 @Profile("local")
-public class LocalS3TemplateConfig {
+public class LocalstackConfig {
 
-    @Value("${spring.cloud.aws.s3.region}")
+    @Value("${application.localstack.endpoint}")
+    private String endpoint;
+
+    @Value("${application.localstack.region}")
     private String region;
 
-    @Value("${spring.cloud.aws.credentials.access-key}")
+    @Value("${application.localstack.access-key}")
     private String accessKey;
 
-    @Value("${spring.cloud.aws.credentials.secret-key}")
+    @Value("${application.localstack.secret-key}")
     private String secretKey;
 
     @Bean
@@ -30,7 +33,7 @@ public class LocalS3TemplateConfig {
         return S3Client.builder()
                 .region(Region.of(region))
                 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey)))
-                .endpointOverride(URI.create("http://localhost:4566")) // Point to LocalStack endpoint
+                .endpointOverride(URI.create(endpoint))
                 .serviceConfiguration(S3Configuration.builder().pathStyleAccessEnabled(true).build())
                 .build();
     }

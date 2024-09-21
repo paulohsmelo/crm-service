@@ -56,11 +56,6 @@ public class CustomerControllerIntegrationTest extends Postgres {
         customerRepository.deleteAll();
     }
 
-    @AfterEach
-    void tearDown() throws IOException {
-        FileSystemUtils.deleteRecursively(Path.of(TEST_UPLOADS));
-    }
-
     @Test
     void unauthorized() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/customer/all")
@@ -211,49 +206,7 @@ public class CustomerControllerIntegrationTest extends Postgres {
                 .andReturn();
 
         CustomerDTO customerDTO = objectMapper.readValue(response.getResponse().getContentAsString(), CustomerDTO.class);
-        assertEquals(customerDTO.getPhotoUrl(), TEST_UPLOADS + customer.getId() + "/photo-test.jpg");
-    }
-
-    @Test
-    void uploadPhotoFileAlreadyExists() throws Exception {
-        Customer customer = createCustomer("Customer8", "Password8");
-
-        // Create a file in the customer directory
-        String uploadPath = TEST_UPLOADS + customer.getId();
-        Files.createDirectories(Path.of(uploadPath));
-        Files.createFile(Path.of(uploadPath + "/photo-test.jpg"));
-
-        byte[] image = IOUtils.toByteArray(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("photo-test.jpg")));
-
-        MockMultipartFile mockMultipartFile =
-                new MockMultipartFile("photo", "photo-test.jpg", MediaType.IMAGE_JPEG_VALUE, image);
-
-        MvcResult response = mockMvc.perform(
-                        MockMvcRequestBuilders.multipart("/customer/" + customer.getId() + "/photo")
-                                .file(mockMultipartFile)
-                                .with(SecurityMockMvcRequestPostProcessors.httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andReturn();
-
-        assertEquals(response.getResponse().getContentAsString(), "File already exists: photo-test.jpg");
-    }
-
-    @Test
-    void uploadPhotoEmptyFile() throws Exception {
-        Customer customer = createCustomer("Customer9", "Password9");
-
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("photo", "empty-file.jpg", null, (byte[]) null);
-
-        MvcResult response = mockMvc.perform(
-                        MockMvcRequestBuilders.multipart("/customer/" + customer.getId() + "/photo")
-                                .file(mockMultipartFile)
-                                .with(SecurityMockMvcRequestPostProcessors.httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD))
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andReturn();
-
-        assertEquals(response.getResponse().getContentAsString(), "File is empty: empty-file.jpg");
+        assertEquals(customerDTO.getPhotoUrl(), "/" + TEST_BUCKET_NAME + "/" + customer.getId() + "/photo-test.jpg");
     }
 
     private Customer createCustomer(String name, String surname) {
