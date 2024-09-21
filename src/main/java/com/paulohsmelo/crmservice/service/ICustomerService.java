@@ -4,6 +4,7 @@ import com.paulohsmelo.crmservice.dto.CreateCustomerDTO;
 import com.paulohsmelo.crmservice.dto.CustomerDTO;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URL;
 import java.util.List;
 
 public interface ICustomerService {
@@ -19,4 +20,6 @@ public interface ICustomerService {
     void delete(Long id);
 
     CustomerDTO uploadPhoto(Long id, MultipartFile file);
+
+    URL getPhotoUrl(Long id);
 }

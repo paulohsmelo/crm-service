@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URL;
 import java.util.List;
 
 @RestController
@@ -64,6 +65,12 @@ public class CustomerController {
     public ResponseEntity<CustomerDTO> uploadPhoto(@PathVariable Long id, @Valid @RequestParam("photo") MultipartFile file) {
         log.debug("Upload photo, id: {}, fileName: {}", id, file.getOriginalFilename());
         return ResponseEntity.ok(customerService.uploadPhoto(id, file));
+    }
+
+    @GetMapping(value = "/{id}/photo", produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> getPhotoUrl(@PathVariable Long id) {
+        log.debug("Get photo, id: {}", id);
+        return ResponseEntity.ok(customerService.getPhotoUrl(id).toString());
     }
 
 }

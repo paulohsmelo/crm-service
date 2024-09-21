@@ -1,5 +1,6 @@
 package com.paulohsmelo.crmservice.service.impl;
 
+import com.paulohsmelo.crmservice.exception.NoDataFoundException;
 import com.paulohsmelo.crmservice.service.IUploadService;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
@@ -10,6 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,4 +37,16 @@ public class UploadS3Service implements IUploadService {
             throw new RuntimeException("File upload failed: " + file.getOriginalFilename());
         }
     }
+
+    @Override
+    public URL createDownloadPhotoURL(String photoUrl) {
+        String url = photoUrl.substring(1); // removing initial slash /
+
+        if (!s3Template.objectExists(bucketName, url)) {
+            throw new NoDataFoundException("No data found for URL: " + photoUrl);
+        }
+
+        return s3Template.createSignedGetURL(bucketName, url, Duration.of(5, ChronoUnit.MINUTES));
+    }
+
 }

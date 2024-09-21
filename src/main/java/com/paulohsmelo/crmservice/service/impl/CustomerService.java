@@ -75,6 +75,12 @@ public class CustomerService implements ICustomerService {
         return mapToDTO(customer);
     }
 
+    @Override
+    public URL getPhotoUrl(Long id) {
+        Customer customer = getCustomer(id);
+        return uploadService.createDownloadPhotoURL(customer.getPhotoUrl());
+    }
+
     private Customer getCustomer(Long id) {
         return customerRepository.findById(id)
                 .orElseThrow(() -> new NoDataFoundException("Customer id " + id + " not found"));
